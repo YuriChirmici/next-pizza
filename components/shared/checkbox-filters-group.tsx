@@ -38,7 +38,6 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
 		<div className={className}>
 			<p className="font-bold mb-3"></p>
 
-
 			{showAll && (
 				<div className="mb-5">
 					<Input
