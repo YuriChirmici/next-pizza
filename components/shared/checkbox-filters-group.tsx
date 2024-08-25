@@ -2,41 +2,59 @@
 
 import React from "react";
 import { FilterCheckbox, FilterCheckboxProps } from "./filter-checkbox";
-import { Input } from "../ui";
+import { Input, Skeleton } from "../ui";
 
-type Item = FilterCheckboxProps;
+type Item = Omit<FilterCheckboxProps, "prefix">;
 
 interface Props {
 	title: string;
+	name: string;
 	items: Item[];
-	defaultItems: Item[];
+	defaultItems?: Item[];
 	limit?: number;
+	loading?: boolean;
 	searchInputPlaceholder?: string;
-	onChange?: (values: string[]) => void;
-	defaultValue?: string[];
+	onCheck: (value: string) => void,
 	className?: string;
+	selectedValues: Set<string>
 }
 
 export const CheckboxFiltersGroup: React.FC<Props> = ({
 	title,
+	name,
 	items,
 	defaultItems,
 	limit = 5,
 	searchInputPlaceholder = "Поиск...",
+	loading,
 	className,
-	onChange,
-	defaultValue,
+	onCheck,
+	selectedValues,
 }) => {
 	const [ showAll, setShowAll ] = React.useState(false);
 	const [ searchValue, setSearchValue ] = React.useState("");
 
+	const titleElement = <p className="font-bold mb-3">{title}</p>;
+
+	if (loading) {
+		return <div className={className}>
+			{titleElement}
+
+			{...Array(limit).fill(0).map((_, i) => (
+				<Skeleton key={i} className="h-5 mb-3 rounded-[8px]" />
+			))}
+
+			<Skeleton className="w-28 h-5 rounded-[8px]" />
+		</div>;
+	}
+
 	const displayedItems = showAll ?
 		items.filter((item) => item.text.toLowerCase().includes(searchValue.toLowerCase())) :
-		defaultItems.slice(0, limit);
+		(defaultItems || items).slice(0, limit);
 
 	return (
 		<div className={className}>
-			<p className="font-bold mb-3"></p>
+			{titleElement}
 
 			{showAll && (
 				<div className="mb-5">
@@ -54,8 +72,9 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
 						text={item.text}
 						value={item.value}
 						endAdornment={item.endAdornment}
-						checked={false}
-						onCheckedChange={(ids) => console.log(ids)}
+						checked={selectedValues.has(item.value)}
+						onCheckedChange={() => onCheck(item.value)}
+						prefix={name}
 					/>
 				))}
 			</div>
