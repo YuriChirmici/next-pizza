@@ -4,22 +4,18 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import { useCategoryStore } from "@/store/category";
 import { useRouter } from "next/navigation";
+import { Category, Product } from "@prisma/client";
+
+interface ICategory extends Category {
+	products: Product[]
+}
 
 interface Props {
 	className?: string;
+	categories: ICategory[];
 }
 
-const categories = [
-	{ id: 1, name: "Пиццы" },
-	{ id: 2, name: "Комбо" },
-	{ id: 3, name: "Закуски" },
-	{ id: 4, name: "Коктейли" },
-	{ id: 5, name: "Кофе" },
-	{ id: 6, name: "Напитки" },
-	{ id: 7, name: "Десерты" },
-];
-
-export const Categories: React.FC<Props> = ({ className }) => {
+export const Categories: React.FC<Props> = ({ className, categories }) => {
 	const categoryActiveId = useCategoryStore((state) => state.activeId);
 	const router = useRouter();
 
@@ -31,10 +27,10 @@ export const Categories: React.FC<Props> = ({ className }) => {
 
 	return (
 		<div className={cn("inline-flex gap-1 bg-gray-50 p-1 rounded-2xl", className)}>
-			{categories.map(({ id, name }) => (
+			{categories.filter(c => c.products?.length).map(({ id, name }) => (
 				<a
 					className={cn(
-						"flex items-center font-bold h-11 rounded-2xl px-5",
+						"flex items-center font-bold h-11 rounded-2xl px-5 cursor-pointer",
 						categoryActiveId === id && "bg-white shadow-md shadow-gray-200 text-primary"
 					)}
 					onClick={() => navigateToCategory(name)}
