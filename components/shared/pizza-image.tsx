@@ -14,7 +14,7 @@ const sizeToPx = {
 	40: 500,
 };
 
-export const ProductImage: React.FC<Props> = ({ className, src, name, size }) => {
+export const PizzaImage: React.FC<Props> = ({ className, src, name, size }) => {
 	const sizePx = sizeToPx[size];
 	const circleBaseClass = "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-2 rounded-full";
 

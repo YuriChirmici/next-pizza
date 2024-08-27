@@ -1,9 +1,6 @@
-import { Container, Title } from "@/components/shared";
+import { Container, PizzaImage, Title } from "@/components/shared";
 import { GroupVariants } from "@/components/shared/group-variants";
-import { ProductImage } from "@/components/shared/product-image";
-import { Button } from "@/components/ui";
 import { prisma } from "@/prisma/prisma-client";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 interface Props {
@@ -12,7 +9,7 @@ interface Props {
 	}
 }
 
-export default async function Page({ params: { id } }: Props) {
+export default async function ProductPage({ params: { id } }: Props) {
 	const product = await prisma.product.findFirst({
 		where: { id: Number(id) },
 		include: { items: true }
@@ -25,7 +22,7 @@ export default async function Page({ params: { id } }: Props) {
 	return (
 		<Container className="flex flex-col my-10">
 			<div className="flex flex-1">
-				<ProductImage src={product.imageUrl} size={20} name={product.name} />
+				<PizzaImage src={product.imageUrl} size={20} name={product.name} />
 				<div className="w-[490px] bg-[#F6F6F6] p-7">
 					<Title text={product.name} size="md" className="font-extrabold mb-1" />
 					<p className="text-gray-400">Lorem ipsum dolor sit amet.</p>
