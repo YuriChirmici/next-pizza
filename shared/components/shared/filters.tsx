@@ -7,9 +7,9 @@ import { CheckboxFiltersGroup } from "./checkbox-filters-group";
 import { useDebounce } from "react-use";
 import QueryString from "qs";
 import { useRouter } from "next/navigation";
-import { useFilters } from "@/hooks/use-filters";
-import { useIngredients } from "@/hooks/use-ingredients";
-import { FILTER_MAX_PRICE, FILTER_MIN_PRICE } from "@/hooks/constants";
+import { useFilters } from "@/shared/hooks/use-filters";
+import { useIngredients } from "@/shared/hooks/use-ingredients";
+import { FILTER_MAX_PRICE, FILTER_MIN_PRICE } from "@/shared/hooks/constants";
 
 interface Props {
 	className?: string;

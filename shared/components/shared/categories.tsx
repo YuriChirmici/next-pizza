@@ -1,8 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import React from "react";
-import { useCategoryStore } from "@/store/category";
+import { useCategoryStore } from "@/shared/store/category";
 import { useRouter } from "next/navigation";
 import { Category, Product } from "@prisma/client";
 
