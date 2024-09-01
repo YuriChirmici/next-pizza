@@ -18,9 +18,14 @@ export const ChooseProductModal: React.FC<Props> = ({ className, product }) => {
 
 	return (
 		<Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
-			<DialogContent className={cn("p-0 w-[1060px] max-w-[1060px] min-h-[560px] bg-white overflow-hidden", className)}>
+			<DialogContent className={cn("p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-hidden", className)}>
 				{ isPizzaForm ? (
-					<ChoosePizzaForm imageUrl={product.imageUrl} name={product.name} ingredients={[]} items={[]} />
+					<ChoosePizzaForm
+						imageUrl={product.imageUrl}
+						name={product.name}
+						ingredients={product.ingredients}
+						items={product.items}
+					/>
 				) : (
 					<ChooseProductForm imageUrl={product.imageUrl} name={product.name} />
 				)}

@@ -28,7 +28,7 @@ export default async function ProductPage({ params: { id } }: Props) {
 					<p className="text-gray-400">Lorem ipsum dolor sit amet.</p>
 
 					<GroupVariants
-						selectedValue="1"
+						value="1"
 						items={[ {
 							name: "Маленькая",
 							value: "1",

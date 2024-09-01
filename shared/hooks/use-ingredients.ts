@@ -15,7 +15,7 @@ export const useIngredients = (): ReturnProps => {
 		setLoading(true);
 		API.ingredients.getAll()
 			.then((data) => setIngredients(data))
-			.catch((err) => console.log(err))
+			.catch((err) => console.log(err)) // TODO
 			.finally(() => setLoading(false));
 	}, []);
 
