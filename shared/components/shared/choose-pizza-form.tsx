@@ -17,7 +17,7 @@ interface Props {
 	name: string;
 	ingredients: Ingredient[];
 	items: ProductItem[];
-	onClickAddCart?: VoidFunction;
+	onSubmit: (itemId: number, ingredients: number[]) => void;
 	className?: string;
 }
 
@@ -26,7 +26,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 	name,
 	ingredients,
 	items,
-	onClickAddCart,
+	onSubmit,
 	className,
 }) => {
 
@@ -35,14 +35,20 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 		type, setType,
 		selectedIngredients, toggleIngredient,
 		availablePizzaSizes,
+		currentItemId,
 	} = usePizzaOptions({ items });
 
 	const totalPrice = calcTotalPizzaPrice({ items, type, size, ingredients, selectedIngredients });
 	const textDetails = `${size} см, ${mapPizzaType[type]} тесто`;
 
 	const handleClick = () => {
-		onClickAddCart?.();
-		console.log({ size, type, ingredients: selectedIngredients });
+		if (!currentItemId) {
+			console.error("No currentItemId for pizza add to cart");
+			return;
+		}
+
+		onSubmit(currentItemId, Array.from(selectedIngredients));
+
 	};
 
 	return (
