@@ -1,5 +1,5 @@
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSet } from "react-use";
 import { FILTER_MAX_PRICE, FILTER_MIN_PRICE } from "./constants";
 
@@ -49,7 +49,7 @@ export const useFilters = (): ReturnProps => {
 		setPrice({ priceFrom, priceTo });
 	};
 
-	return {
+	return useMemo(() => ({
 		priceFrom: price.priceFrom,
 		priceTo: price.priceTo,
 		ingredients,
@@ -59,5 +59,5 @@ export const useFilters = (): ReturnProps => {
 		toggleSize,
 		togglePizzaType,
 		setPriceRange,
-	};
+	}), [ price, ingredients, sizes, pizzaTypes ]);
 };

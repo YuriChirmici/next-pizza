@@ -2,22 +2,15 @@
 
 import React from "react";
 import { useIntersection } from "react-use";
-
 import { Title } from "./title";
 import { ProductCard } from "./product-card";
 import { cn } from "@/shared/lib/utils";
 import { useCategoryStore } from "@/shared/store/category";
-
-interface Item {
-	id: number;
-	name: string;
-	imageUrl: string;
-	price: number;
-}
+import { ProductWithRelations } from "@/@types/prisma";
 
 interface Props {
 	title: string;
-	items: Item[];
+	items: ProductWithRelations[];
 	categoryId: number;
 	className?: string;
 	listClassName?: string;
@@ -41,7 +34,7 @@ export const ProductsGroupList: React.FC<Props> = ({
 			setActiveCategoryId(categoryId);
 		}
 	}, [ categoryId, intersection?.isIntersecting, setActiveCategoryId ]);
-
+	console.log(items);
 	return (
 		<div className={className} id={title} ref={intersectionRef}>
 			<Title text={title} size="lg" className="font-extrabold mb-5" />
@@ -52,7 +45,8 @@ export const ProductsGroupList: React.FC<Props> = ({
 						id={item.id}
 						name={item.name}
 						imageUrl={item.imageUrl}
-						price={item.price}
+						price={item.items[0].price}
+						ingredients={item.ingredients}
 					/>
 				))}
 			</div>
