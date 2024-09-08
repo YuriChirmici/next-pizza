@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "@/shared/components/shared";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
 	title: "Next Pizza | Главная"
@@ -17,6 +18,7 @@ export default function HomeLayout({
 			<Header />
 			{children}
 			{modal}
+			<Toaster />
 		</main>
 	);
 }

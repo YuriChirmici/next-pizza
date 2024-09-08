@@ -17,8 +17,9 @@ interface Props {
 	name: string;
 	ingredients: Ingredient[];
 	items: ProductItem[];
-	onSubmit: (itemId: number, ingredients: number[]) => void;
+	onSubmitProduct: (itemId: number, ingredients: number[]) => void;
 	className?: string;
+	loading: boolean;
 }
 
 export const ChoosePizzaForm: React.FC<Props> = ({
@@ -26,8 +27,9 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 	name,
 	ingredients,
 	items,
-	onSubmit,
+	onSubmitProduct,
 	className,
+	loading,
 }) => {
 
 	const {
@@ -47,8 +49,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 			return;
 		}
 
-		onSubmit(currentItemId, Array.from(selectedIngredients));
-
+		onSubmitProduct(currentItemId, Array.from(selectedIngredients));
 	};
 
 	return (
@@ -87,7 +88,11 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 					</div>
 				</div>
 
-				<Button className="h-[55px] px-10 text-base rounded-2xl w-full mt-10" onClick={handleClick}>
+				<Button
+					className="h-[55px] px-10 text-base rounded-2xl w-full mt-10"
+					onClick={handleClick}
+					loading={loading}
+				>
 					Добавить в корзину за {totalPrice} ₽
 				</Button>
 			</div>
