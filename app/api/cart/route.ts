@@ -4,6 +4,7 @@ import { updateCartTotalAmount } from "@/shared/lib/update-cart-total-amount";
 import { CreateCartItemValues } from "@/shared/services/dto/cart.dto";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
+import { CartItem } from "@prisma/client";
 
 export async function GET(req: NextRequest) {
 	try {
@@ -46,13 +47,7 @@ export async function POST(req: NextRequest) {
 
 		const userCart = await findOrCreateCart(token);
 		const data = (await req.json()) as CreateCartItemValues;
-		const foundCartItem = await prisma.cartItem.findFirst({
-			where: {
-				cartId: userCart.id,
-				productItemId: data.productItemId,
-				ingredients: { every: { id: { in: data.ingredientsIds } } }
-			}
-		});
+		const foundCartItem = await findCartItem(userCart.id, data.productItemId, data.ingredientsIds || []);
 
 		if (foundCartItem) {
 			await prisma.cartItem.update({
@@ -70,7 +65,7 @@ export async function POST(req: NextRequest) {
 					productItemId: data.productItemId,
 					quantity: 1,
 					ingredients: {
-						connect: data.ingredientsIds?.map(id => ({ id }))
+						connect: (data.ingredientsIds || []).map(id => ({ id }))
 					}
 
 				}
@@ -87,3 +82,22 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json({ message: "Error" }, { status: 500 });
 	}
 }
+
+const findCartItem = async (cartId: number, productItemId: number, ingredientsIds: number[]): Promise<CartItem | undefined> => {
+	const cartItems = await prisma.cartItem.findMany({
+		where: {
+			cartId,
+			productItemId
+		},
+		include: {
+			ingredients: true
+		}
+	});
+
+	const foundCartItem = cartItems.find(item => (
+		item.ingredients.every(({ id }) => ingredientsIds.includes(id)) &&
+		ingredientsIds.every((id => item.ingredients.find(ingredient => ingredient.id === id)))
+	));
+
+	return foundCartItem;
+};
