@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
-
+import React from "react";
 import {
 	Sheet,
 	SheetContent,
@@ -16,27 +15,12 @@ import { Button } from "../ui";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CartDrawerItem } from "./cart-drawer-item";
 import { getCartItemDetails } from "@/shared/lib/get-cart-item-details";
-import { useCartStore } from "@/shared/store/cart";
 import Image from "next/image";
 import { Title } from "./title";
+import { useCart } from "@/shared/hooks/use-cart";
 
-interface Props {
-	className?: string;
-}
-
-export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children, className }) => {
-	const [ items, totalAmount, fetchCartItems, updateItemQuantity, removeCartItem, loading ] = useCartStore((state) => [
-		state.items,
-		state.totalAmount,
-		state.fetchCartItems,
-		state.updateItemQuantity,
-		state.removeCartItem,
-		state.loading
-	]);
-
-	useEffect(() => {
-		fetchCartItems();
-	}, []);
+export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
+	const { updateItemQuantity, removeCartItem, items, totalAmount, loading } = useCart(true);
 
 	const onClickCountButton = (id: number, quantity: number, type: "plus" | "minus") => {
 		const value = type === "plus" ? quantity + 1 : quantity - 1;
@@ -61,10 +45,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children,
 									className="mb-2"
 									id={item.id}
 									imageUrl={item.imageUrl}
-									details={item.pizzaSize && item.pizzaType
-										? getCartItemDetails({ pizzaSize: item.pizzaSize, pizzaType: item.pizzaType, ingredients: item.ingredients })
-										: ""
-									}
+									details={getCartItemDetails({ pizzaSize: item.pizzaSize, pizzaType: item.pizzaType, ingredients: item.ingredients })}
 									disabled={item.disabled}
 									name={item.name}
 									price={item.price}
@@ -86,7 +67,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren<Props>> = ({ children,
 									<span className="font-bold text-lg"> {totalAmount} ₽</span>
 								</div>
 
-								<Link href="/cart">
+								<Link href="/checkout">
 									<Button
 										type="submit"
 										className="w-full h-12 text-base"

@@ -1,10 +1,9 @@
-import { Ingredient } from "@prisma/client";
 import { mapPizzaType, PizzaSize, PizzaType } from "../constants/pizza";
 import { CartStateItem } from "./get-cart-details";
 
 interface Props {
-	pizzaType: PizzaType,
-	pizzaSize: PizzaSize,
+	pizzaType?: PizzaType,
+	pizzaSize?: PizzaSize,
 	ingredients: CartStateItem["ingredients"],
 }
 

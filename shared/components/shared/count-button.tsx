@@ -7,7 +7,7 @@ export interface CountButtonProps {
 	size?: "sm" | "lg";
 	className?: string;
 	onClick?: (type: "plus" | "minus") => void;
-	disabled: boolean;
+	disabled?: boolean;
 }
 
 export const CountButton: React.FC<CountButtonProps> = ({
