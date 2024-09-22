@@ -17,6 +17,7 @@ interface Props {
 
 export const Filters: React.FC<Props> = ({ className }) => {
 	const router = useRouter();
+	const isMounted = React.useRef(false);
 
 	const {
 		ingredients: selectedIngredients,
@@ -38,6 +39,11 @@ export const Filters: React.FC<Props> = ({ className }) => {
 	const items = allIngredients.map(({ id, name }) => ({ value: id.toString(), text: name }));
 
 	useDebounce(() => {
+		if (!isMounted.current) {
+			isMounted.current = true;
+			return;
+		}
+
 		const queryFilter = {
 			priceFrom,
 			priceTo,
@@ -48,6 +54,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
 		const query = QueryString.stringify(queryFilter, {
 			arrayFormat: "comma"
 		});
+
 		router.push(`?${query}`, { scroll: false });
 	},
 	300,

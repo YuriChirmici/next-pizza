@@ -117,27 +117,28 @@ model CartItem {
 }
 
 model Order {
-	id			Int 		@id @default(autoincrement())
+	id				Int 		@id @default(autoincrement())
 	
-	user		User?		@relation(fields: [userId], references: [id])
-	userId		Int?		@unique
+	user			User?		@relation(fields: [userId], references: [id])
+	userId			Int?		@unique
 
-	token		String
+	token			String
 
-	totalAmount Int
-	status		OrderStatus
-	paymentId	String?
+	totalAmount 	Int
+	status			OrderStatus
+	paymentId		String?
+	paymentProvider	PaymentProvider
 
-	items		Json
+	items			Json
 
-	fullName 	String
-	address		String
-	email 		String
-	phone 		String
-	comment 	String?
+	fullName 		String
+	address			String
+	email 			String
+	phone 			String
+	comment 		String?
 
-	createdAt 	DateTime 	@default(now())
-	updatedAt 	DateTime 	@updatedAt
+	createdAt 		DateTime 	@default(now())
+	updatedAt 		DateTime 	@updatedAt
 }
 
 model VerificationCode {
@@ -162,4 +163,8 @@ enum OrderStatus {
 enum UserRole {
 	USER
 	ADMIN
+}
+
+enum PaymentProvider {
+	STRIPE
 }

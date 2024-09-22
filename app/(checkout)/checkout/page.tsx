@@ -21,10 +21,11 @@ import { API } from "@/shared/services/api-client";
 import { getCartItemDetails } from "@/shared/lib/get-cart-item-details";
 import { CheckoutCart } from "@/shared/components/shared/checkout/cart";
 import { CheckoutAddress, CheckoutPersonalInfo } from "@/shared/components/shared/checkout";
+import { createOrder } from "@/app/actions";
 
 export default function CheckoutPage() {
 	const { totalAmount: productsAmount, items, loading, updateItemQuantity, removeCartItem } = useCart(true);
-	// const [ submitting, setSubmitting ] = React.useState(false);
+	const [ submitting, setSubmitting ] = React.useState(false);
 	// const { data: session } = useSession();
 
 	const form = useForm<TFormOrderData>({
@@ -55,26 +56,27 @@ export default function CheckoutPage() {
 	// }, [ session ]);
 
 	const onSubmit = async (data: TFormOrderData) => {
-		console.log(data);
-		// try {
-		// 	setSubmitting(true);
+		try {
+			setSubmitting(true);
+			await new Promise((resolve) => setTimeout(resolve, 2000));
 
-		// 	const url = await createOrder(data);
+			const url = await createOrder(data);
 
-		// 	toast.error("Заказ успешно оформлен! 📝", {
-		// 		icon: "✅",
-		// 	});
+			toast.success("Заказ успешно оформлен! 📝", {
+				icon: "✅",
+			});
 
-		// 	if (url) {
-		// 		location.href = url;
-		// 	}
-		// } catch (error) {
-		// 	return toast.error("Неверный E-Mail или пароль", {
-		// 		icon: "❌",
-		// 	});
-		// } finally {
-		// 	setSubmitting(false);
-		// }
+			if (url) {
+				location.href = url;
+			}
+		} catch (err) {
+			console.error(err);
+			return toast.error("Не удалось создать заказ", {
+				icon: "❌",
+			});
+		} finally {
+			setSubmitting(false);
+		}
 	};
 
 	return (
@@ -91,7 +93,7 @@ export default function CheckoutPage() {
 						</div>
 
 						<div className="w-[450px]">
-							<CheckoutSidebar productsAmount={productsAmount} loading={loading} />
+							<CheckoutSidebar productsAmount={productsAmount} loading={loading || submitting} />
 						</div>
 					</div>
 				</form>
