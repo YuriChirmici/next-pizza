@@ -1,32 +1,24 @@
 "use client";
 
-// import { CartItem } from "@/shared/components/shared/cart-item";
-// import { CartSidebar } from "@/shared/components/shared/cart-sidebar";
 import { Container } from "@/shared/components/shared/container";
-// import { CartItemSkeleton } from "@/shared/components/shared/skeletons/cart-item-skeleton";
-import { Controller, FormProvider, useForm } from "react-hook-form";
-
+import { FormProvider, useForm } from "react-hook-form";
 import { Title } from "@/shared/components/shared/title";
-import { CheckoutItem, CheckoutSidebar, FormInput, WhiteBlock } from "@/shared/components/shared";
+import { CheckoutSidebar } from "@/shared/components/shared";
 import { useCart } from "@/shared/hooks/use-cart";
 import React from "react";
 import toast from "react-hot-toast";
 import { TFormOrderData, orderFormSchema } from "@/shared/schemas/order-form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { FormInput, FormTextarea } from "@/shared/components/shared/form";
-// import { AdressInput } from "@/shared/components/shared/adress-input";
-// import { createOrder } from "@/shared/app/actions";
-// import { useSession } from "next-auth/react";
 import { API } from "@/shared/services/api-client";
-import { getCartItemDetails } from "@/shared/lib/get-cart-item-details";
 import { CheckoutCart } from "@/shared/components/shared/checkout/cart";
 import { CheckoutAddress, CheckoutPersonalInfo } from "@/shared/components/shared/checkout";
 import { createOrder } from "@/app/actions";
+import { useSession } from "next-auth/react";
 
 export default function CheckoutPage() {
 	const { totalAmount: productsAmount, items, loading, updateItemQuantity, removeCartItem } = useCart(true);
 	const [ submitting, setSubmitting ] = React.useState(false);
-	// const { data: session } = useSession();
+	const { data: session } = useSession();
 
 	const form = useForm<TFormOrderData>({
 		resolver: zodResolver(orderFormSchema),
@@ -40,20 +32,20 @@ export default function CheckoutPage() {
 		},
 	});
 
-	// React.useEffect(() => {
-	// 	async function fetchUserInfo() {
-	// 		const data = await API.auth.getMe();
-	// 		const [ firstName, lastName ] = data.fullName.split(" ");
+	React.useEffect(() => {
+		async function fetchUserInfo() {
+			const data = await API.auth.getMe();
+			const [ firstName, lastName ] = data.fullName.split(" ");
 
-	// 		form.setValue("firstName", firstName);
-	// 		form.setValue("lastName", lastName);
-	// 		form.setValue("email", data.email);
-	// 	}
+			form.setValue("firstName", firstName);
+			form.setValue("lastName", lastName);
+			form.setValue("email", data.email);
+		}
 
-	// 	if (session) {
-	// 		fetchUserInfo();
-	// 	}
-	// }, [ session ]);
+		if (session) {
+			fetchUserInfo();
+		}
+	}, [ session ]);
 
 	const onSubmit = async (data: TFormOrderData) => {
 		try {

@@ -6,6 +6,7 @@ import type { UserRole } from "@prisma/client";
 
 interface UserFields {
 	id: number;
+	name: string;
 	role: UserRole;
 }
 
